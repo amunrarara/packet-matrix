@@ -5,16 +5,22 @@
 // #7d22f4
 // #0f0
 
+// Color Palette:
+// Green
+// White
+// Red
+// Blue
+
 (function () {
     "use strict";
 
     const root = this;
 
-    const canvas = document.getElementById("matrix");
+    const canvas: HTMLCanvasElement | null = document.getElementById("matrix") as HTMLCanvasElement | null;
 
-    // fullscreen canvas
+    if (!canvas) throw new Error("Canvas not found");
+
     if (window.devicePixelRatio && window.devicePixelRatio > 1) {
-        // Use higher resolution on retina displays
         let canvasWidth = window.innerWidth;
         let canvasHeight = window.innerHeight;
 
@@ -22,13 +28,14 @@
         canvas.height = canvasHeight * window.devicePixelRatio;
         canvas.style.width = canvasWidth + "px";
         canvas.style.height = canvasHeight + "px";
-        canvas.getContext('2d').scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        canvas.getContext('2d')?.scale(window.devicePixelRatio, window.devicePixelRatio);
     } else {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
 
-    const Pool = function (size) {
+    const Pool = function (size: number) {
         let data = [];
         let maxPoolSize = size;
 
@@ -39,6 +46,8 @@
             }
 
             console.log("fetching: %s", fetchSize);
+
+            // intercept with node_pcap
 
             $.ajax({
                 url: 'https://github-matrix.herokuapp.com/fetch',
@@ -55,6 +64,7 @@
                     Pool.ready = true;
                 }
             });
+
         };
 
         this.next = function () {
